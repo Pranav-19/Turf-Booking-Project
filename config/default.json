@@ -1,0 +1,4 @@
+{
+    "mongoURILocal": "mongodb://localhost:27017/turf_booking_project",
+    "jwtSecret": "tbp_myJwtSecret"
+}
