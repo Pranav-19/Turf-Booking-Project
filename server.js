@@ -19,6 +19,7 @@ mongoose.connect(db,{ useUnifiedTopology: true ,useNewUrlParser: true, useCreate
 app.use('/api/users',require('./routes/api/users'))
 app.use('/api/auth',require('./routes/api/auth'))
 app.use('/api/turfs',require('./routes/api/turfs'))
+app.use('/api/bookings',require('./routes/api/bookings'))
 
 
 const port = process.env.PORT || 5000
