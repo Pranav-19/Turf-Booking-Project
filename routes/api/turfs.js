@@ -17,6 +17,21 @@ router.get('/', (req, res) => {
     })
 })
 
+// @route GET api/turfs/myTurfs
+// @desc Get my turfs
+// @access Public
+router.get('/myTurfs',auth,verifyBusinessUser,(req, res) => {
+    Turf.find({
+        ownerId: req.user.id
+    })
+    .sort({ dateAdded: -1 })
+    .then(turfs => {
+        res.json(turfs)
+    })
+})
+
+
+
 // @route POST api/turfs
 // @desc Add a new turf
 // @access Private
@@ -46,7 +61,7 @@ router.post('/',auth,verifyBusinessUser, (req, res) => {
 
 function verifyBusinessUser(req, res, next){
     if(!canAddTurf(req.user)){
-        return res.status(401).json({msg: "Cannot add Turf, not a business user"})
+        return res.status(401).json({msg: "Cannot add/view Turf, not a business user"})
     }
     next()
 }
