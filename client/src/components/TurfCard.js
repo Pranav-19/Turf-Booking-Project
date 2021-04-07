@@ -15,8 +15,9 @@ import { red } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      maxWidth: 345,
-      margin:20
+      maxWidth: 400,
+      margin:20,
+      borderRadius:10
     },
     media: {
       height: 0,
@@ -25,10 +26,16 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
       backgroundColor: red[500],
     },
+    bold:{
+      fontWeight: 'bold'
+    },
+    leftSpacing:{
+      marginLeft: 5
+    }
   }))
   
   
-const TurfCard = () => {
+const TurfCard = ({ turf }) => {
     const classes = useStyles()
 
     return (
@@ -38,7 +45,7 @@ const TurfCard = () => {
         <CardHeader
           avatar={
             <Avatar  className={classes.avatar}>
-              K
+              {turf.name[0]}
             </Avatar>
           }
           action={
@@ -46,20 +53,27 @@ const TurfCard = () => {
               <MoreVertIcon />
             </IconButton>
           }
-          title="Kalidas Turf"
-          subheader="Mulund West, Mumbai"
+          title={turf.name}
+          subheader={turf.address}
         />
         <CardMedia
           className={classes.media}
           image="/static/images/turf-3.jpg"
-          title="Paella dish"
+          title={turf.name}
         />
         <CardContent>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Address: Mulund West, Mumbai
+          <Typography variant="body1" color="textSecondary" component="p" className={classes.bold} display='inline' >
+            Address: 
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Phone: +91 234567890
+          <Typography variant="body2" color="textSecondary" component="p" display='inline' className={classes.leftSpacing} >
+          {turf.address}
+          </Typography>
+          <br/>
+          <Typography variant="body1" color="textSecondary" component="p" className={classes.bold} display='inline' >
+            Phone:
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p" display='inline' className={classes.leftSpacing} >
+          +91 {turf.phoneNo}
           </Typography>
         </CardContent>
         </CardActionArea>
