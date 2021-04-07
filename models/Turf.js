@@ -25,6 +25,10 @@ const TurfSchema = new Schema({
     ownerId: {
         type: String,
         required: true
+    },
+    isApproved:{
+        type: Boolean,
+        default: false
     }
 })
 

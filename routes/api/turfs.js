@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../../middleware/auth')
 const { canAddTurf } = require('../../permissions/turf')
+const ObjectID = require('mongodb').ObjectID
 
 //Turf model
 const Turf = require('../../models/Turf')
@@ -10,7 +11,21 @@ const Turf = require('../../models/Turf')
 // @desc Get all turfs
 // @access Public
 router.get('/', (req, res) => {
-    Turf.find()
+    Turf.find({})
+    .sort({ dateAdded: -1 })
+    .then(turfs => {
+        res.json(turfs)
+    })
+})
+
+
+// @route GET api/turfs/approved
+// @desc Get approved turfs
+// @access Public
+router.get('/approved', (req, res) => {
+    Turf.find({
+        isApproved: true
+    })
     .sort({ dateAdded: -1 })
     .then(turfs => {
         res.json(turfs)
@@ -56,12 +71,47 @@ router.post('/',auth,verifyBusinessUser, (req, res) => {
     })
 })
 
+// @route PUT api/turfs/:turfId
+// @desc To approve turf
+// @access Private
+router.put('/:turfId', auth, verifyAdminUser, (req, res, next) => {
+
+     //Check if turf is valid
+     if(!ObjectID.isValid(req.params.turfId)){
+        return res.status(400).json({ msg: "Invalid turf id" })
+    }
+
+    Turf.findById(req.params.turfId)
+    .then(turf => {
+        if(!turf){
+            return res.status(400).json({ msg: "Invalid turf id" })
+        }
+        turf.updateOne({
+            isApproved: true
+        })
+        .then(turf => {
+            return res.json({ msg: "Turf has been approved"})
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+
+})
 
 
 
+// To add/view turf
 function verifyBusinessUser(req, res, next){
     if(!canAddTurf(req.user)){
         return res.status(401).json({msg: "Cannot add/view Turf, not a business user"})
+    }
+    next()
+}
+
+// To approve turfs
+function verifyAdminUser(req, res, next){
+    if(!req.user.role === 'ADMIN'){
+        return res.status(401).json({msg: "Cannot approve Turf, not an admin user"})
     }
     next()
 }
