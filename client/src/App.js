@@ -5,7 +5,7 @@ import store from './store'
 import React from 'react'
 import { loadUser } from './actions/authActions'
 import { getTurfs } from './actions/turfsActions'
-import HomePage from './components/HomePage'
+import HomePage from './components/pages/HomePage'
 
 class App extends React.Component {
 

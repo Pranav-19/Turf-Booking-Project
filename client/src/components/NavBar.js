@@ -9,6 +9,7 @@ import SportsSoccerSharpIcon from '@material-ui/icons/SportsSoccerSharp'
 import Login from './auth/Login'
 import Register from './auth/Register'
 import Logout from './auth/Logout'
+import { ViewMyTurfs, AddTurf, ViewMyBookings } from './NavBarLinks'
 import { connect } from 'react-redux'
 
 
@@ -25,23 +26,37 @@ const useStyles = makeStyles((theme) => ({
     },
   }))
 
-
-const authLinks = (
-  <Fragment>
-    <Logout />
-  </Fragment>
-)
-
-const guestLinks = (
-  <Fragment>
-    <Register />
-    <Login />
-  </Fragment>
-)
+  
 
 
 const NavBar = ({auth}) => {
     const classes = useStyles()
+
+    const businessLinks = (
+      <Fragment>
+        <ViewMyTurfs />
+        <AddTurf />
+      </Fragment>
+    )
+    const regularLinks = (
+      <Fragment>
+        <ViewMyBookings />
+      </Fragment>
+    )
+    
+    const authLinks = (
+      <Fragment>
+        { auth.isAuthenticated && auth.user.role === "BUSINESS"? businessLinks: regularLinks}
+        <Logout />
+      </Fragment>
+    )
+    
+    const guestLinks = (
+      <Fragment>
+        <Register />
+        <Login />
+      </Fragment>
+    )
 
     return (
         <div className={classes.root}>
