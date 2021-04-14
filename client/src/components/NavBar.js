@@ -11,6 +11,7 @@ import Register from './auth/Register'
 import Logout from './auth/Logout'
 import { ViewMyTurfs, AddTurf, ViewMyBookings } from './NavBarLinks'
 import { connect } from 'react-redux'
+import { withRouter } from "react-router-dom"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,18 +30,22 @@ const useStyles = makeStyles((theme) => ({
   
 
 
-const NavBar = ({auth}) => {
+const NavBar = ({auth, history}) => {
     const classes = useStyles()
+    
+    const handleLinkClick = (pageURL) => {
+      history.push(pageURL)
+    }
 
     const businessLinks = (
       <Fragment>
-        <ViewMyTurfs />
-        <AddTurf />
+        <ViewMyTurfs onClick={() => handleLinkClick('/myTurfs')} />
+        <AddTurf onClick={() => handleLinkClick('/addTurf')} />
       </Fragment>
     )
     const regularLinks = (
       <Fragment>
-        <ViewMyBookings />
+        <ViewMyBookings onClick={() => handleLinkClick('/myBookings')} />
       </Fragment>
     )
     
@@ -62,10 +67,11 @@ const NavBar = ({auth}) => {
         <div className={classes.root}>
             <AppBar position="fixed">
                 <Toolbar>
-                <IconButton edge="start" className={classes.logoButton} color="inherit" aria-label="logo">
+                <IconButton edge="start" className={classes.logoButton} color="inherit" aria-label="logo"
+                 onClick={() => handleLinkClick('/')} >
                     <SportsSoccerSharpIcon />
                 </IconButton>
-                <Typography variant="h6" className={classes.title}>
+                <Typography variant="h6" className={classes.title} >
                    Turf Booking
                 </Typography>
                 { auth.isAuthenticated? authLinks: guestLinks }
@@ -79,4 +85,4 @@ const mapStateToProps = (state) => ({
   auth:state.auth
 })
 
-export default connect(mapStateToProps, null)(NavBar)
+export default withRouter(connect(mapStateToProps, null)(NavBar))

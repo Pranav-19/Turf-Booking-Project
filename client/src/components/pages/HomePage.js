@@ -22,6 +22,7 @@ const useStyles = makeStyles({
 })
 
 function HomePage(props) {
+
     const classes = useStyles()
     const { turfs } = props.turfs
 
@@ -31,24 +32,6 @@ function HomePage(props) {
                 Popular Turfs
             </Typography>
             <Grid container spacing={2}  >
-                {/* <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid>
-                <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid>
-                <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid>
-                <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid>
-                <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid>
-                <Grid item sm={6} xs={12} md={4} >
-                    <TurfCard />
-                </Grid> */}
 
                 { turfs.map( turf => (
                      <Grid item sm={6} xs={12} md={4} key={turf._id} >
