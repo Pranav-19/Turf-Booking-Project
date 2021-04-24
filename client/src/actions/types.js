@@ -16,6 +16,7 @@ export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const GET_TURFS = 'GET_TURFS';
 export const TURFS_LOADING = 'TURFS_LOADING';
 export const GET_TURFS_ERROR = 'GET_TURFS_ERROR';
+export const SELECT_TURF = 'SELECT_TURF';
 
 //Business Turfs
 export const GET_BUSINESS_TURFS = 'GET_BUSINESS_TURFS';

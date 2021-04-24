@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { GET_TURFS, TURFS_LOADING, GET_TURFS_ERROR } from './types'
+import { GET_TURFS, TURFS_LOADING, GET_TURFS_ERROR, SELECT_TURF } from './types'
 import { returnErrors } from './errorActions'
 
 export const getTurfs = () => dispatch => {
@@ -17,3 +17,8 @@ export const getTurfs = () => dispatch => {
         });
     })
 }
+
+export const selectTurf = (turf) => dispatch => {
+    dispatch({ type: SELECT_TURF, payload: turf})
+}
+

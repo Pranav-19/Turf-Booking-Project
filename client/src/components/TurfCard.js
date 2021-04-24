@@ -12,6 +12,9 @@ import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { red } from '@material-ui/core/colors'
+import { withRouter } from "react-router-dom"
+import { connect } from 'react-redux'
+import { selectTurf } from '../actions/turfsActions'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,13 +38,18 @@ const useStyles = makeStyles((theme) => ({
   }))
   
   
-const TurfCard = ({ turf }) => {
+const TurfCard = ({ turf, history,selectTurf }) => {
     const classes = useStyles()
+
+    const onClick = () => {
+      selectTurf(turf)
+      history.push(`/turfs/${turf._id}`)
+    }
 
     return (
         <Card className={classes.root} 
         raised >
-        <CardActionArea>
+        <CardActionArea onClick={onClick}>
         <CardHeader
           avatar={
             <Avatar  className={classes.avatar}>
@@ -58,7 +66,7 @@ const TurfCard = ({ turf }) => {
         />
         <CardMedia
           className={classes.media}
-          image="/static/images/turf-3.jpg"
+          image={turf.fileURL?turf.fileURL:"/static/images/turf-3.jpg"}
           title={turf.name}
         />
         <CardContent>
@@ -78,7 +86,7 @@ const TurfCard = ({ turf }) => {
         </CardContent>
         </CardActionArea>
         <CardActions disableSpacing>
-            <Button fullWidth variant="outlined" color="primary">
+            <Button fullWidth variant="outlined" color="primary" onClick={onClick}>
                 Book Now    
             </Button>
         </CardActions>
@@ -87,4 +95,4 @@ const TurfCard = ({ turf }) => {
     )
 }
 
-export default TurfCard
+export default withRouter(connect(null, { selectTurf })(TurfCard))

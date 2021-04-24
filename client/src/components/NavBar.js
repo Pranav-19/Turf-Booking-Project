@@ -40,7 +40,7 @@ const NavBar = ({auth, history}) => {
     const businessLinks = (
       <Fragment>
         <ViewMyTurfs onClick={() => handleLinkClick('/myTurfs')} />
-        <AddTurf onClick={() => handleLinkClick('/addTurf')} />
+        <AddTurf  />
       </Fragment>
     )
     const regularLinks = (

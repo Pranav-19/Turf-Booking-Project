@@ -1,4 +1,13 @@
 {
     "mongoURILocal": "mongodb://localhost:27017/turf_booking_project",
-    "jwtSecret": "tbp_myJwtSecret"
+    "jwtSecret": "tbp_myJwtSecret",
+    "firebaseConfig": {
+        "apiKey": "AIzaSyAaPJK9b70zO2FLE1h3thlN7Kt-sji9y9M",
+        "authDomain": "turf-booking-project-b7b39.firebaseapp.com",
+        "projectId": "turf-booking-project-b7b39",
+        "storageBucket": "turf-booking-project-b7b39.appspot.com",
+        "messagingSenderId": "548749574866",
+        "appId": "1:548749574866:web:0d09ac24e8eccf1394a30b",
+        "measurementId": "G-XJTFQS5MB3"
+    }
 }

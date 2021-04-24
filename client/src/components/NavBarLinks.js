@@ -1,9 +1,6 @@
 import { Fragment } from 'react'
 import Button from '@material-ui/core/Button'
-import ViewMyBookingsPage from './pages/ViewMyBookingsPage'
-import ViewMyTurfsPage from './pages/ViewMyTurfsPage'
 import AddTurfPage from './pages/AddTurfPage'
-
 
 export const ViewMyTurfs = ({onClick}) => (
     <Fragment>
@@ -12,11 +9,12 @@ export const ViewMyTurfs = ({onClick}) => (
         </Button>
     </Fragment>
 )
-export const AddTurf = ({onClick}) => (
+export const AddTurf = () => (
     <Fragment>
-        <Button color="inherit" onClick={onClick} >
+        {/* <Button color="inherit" onClick={} >
             Add Turf
-        </Button>
+        </Button> */}
+        <AddTurfPage />
     </Fragment>
 )
 export const ViewMyBookings = ({onClick}) => (

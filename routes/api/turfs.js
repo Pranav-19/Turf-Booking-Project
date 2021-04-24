@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../middleware/auth')
+const auth = require('../../middleware/auth').auth
 const { canAddTurf } = require('../../permissions/turf')
 const ObjectID = require('mongodb').ObjectID
+
 
 //Turf model
 const Turf = require('../../models/Turf')
@@ -32,6 +33,7 @@ router.get('/approved', (req, res) => {
     })
 })
 
+
 // @route GET api/turfs/myTurfs
 // @desc Get my turfs
 // @access Public
@@ -46,23 +48,50 @@ router.get('/myTurfs',auth,verifyBusinessUser,(req, res) => {
 })
 
 
+// @route GET api/turfs/:turfId
+// @desc Get a turf
+// @access Public
+router.get('/:turfId', (req, res) => {
+     //Check if turf is valid
+     if(!ObjectID.isValid(req.params.turfId)){
+        return res.status(400).json({ msg: "Invalid turf id" })
+    }
+
+    Turf.findById(req.params.turfId)
+    .then(turf => {
+        if(!turf){
+            return res.status(400).json({ msg: "Invalid turf id" })
+        }
+        res.json(turf)
+    }).catch(err => {
+        console.log(err)
+    })
+
+})
+
+
+
+
+
 
 // @route POST api/turfs
 // @desc Add a new turf
 // @access Private
 router.post('/',auth,verifyBusinessUser, (req, res) => {
-    const { name, address, phoneNo, costPerHour } = req.body
+    const { name, address, phoneNo, costPerHour, locality, fileURL } = req.body
 
-    if(!name || !address || !phoneNo || !costPerHour){
+    if(!name || !address || !phoneNo || !costPerHour || !locality){
         res.status(400).json({ msg: "Please enter all fields" })
     }
 
     const newTurf = new Turf({
-        name,
+        name,   
         address,
         phoneNo,
         costPerHour,
-        ownerId: req.user.id
+        locality,
+        ownerId: req.user.id,
+        fileURL
     })
 
     newTurf.save()

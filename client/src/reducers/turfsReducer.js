@@ -1,8 +1,9 @@
-import { GET_TURFS, TURFS_LOADING, GET_TURFS_ERROR } from '../actions/types'
+import { GET_TURFS, TURFS_LOADING, GET_TURFS_ERROR, SELECT_TURF } from '../actions/types'
 
 const initialState = {
     turfs: [],
-    isLoading: false
+    isLoading: false,
+    selectedTurf: null
 }
 
 export default function(state = initialState, action) {
@@ -22,6 +23,11 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false
+            }
+        case SELECT_TURF:
+            return{
+                ...state,
+                selectedTurf:action.payload
             }
         default:
             return state;

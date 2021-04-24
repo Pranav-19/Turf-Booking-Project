@@ -10,6 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-analytics.js"></script>
     <Router>
       <Provider store={store}>
         <App />

@@ -3,3 +3,18 @@
   padding: 0;
 }
 
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+  margin-top: 20px;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
+}

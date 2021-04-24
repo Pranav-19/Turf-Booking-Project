@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const TurfSchema = require('./Turf').schema
 
 const BookingSchema = new Schema({
     userId: {
@@ -14,6 +15,10 @@ const BookingSchema = new Schema({
         type: Date,
         required: true
     },
+    turf: {
+        type: TurfSchema,
+        required: true
+    }
 },{ timestamps: true })
 
 module.exports = Booking = mongoose.model('booking', BookingSchema)

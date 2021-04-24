@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const auth = require('../../middleware/auth')
+const auth = require('../../middleware/auth').auth
+const verifyUser = require('../../middleware/auth').verifyUser
 const ObjectID = require('mongodb').ObjectID
 
 
@@ -29,7 +30,7 @@ router.get('/',  (req, res) => {
         res.json({ bookings })
     })
     .catch(err => {
-        console.log(err)
+        console.log(err.response)
     })
 })
 
@@ -77,7 +78,7 @@ router.get('/:turfId',  (req, res) => {
 // @route GET api/bookings/users/:userId
 // @desc Get all bookings of a user
 // @access Public
-router.get('/users/:userId',  (req, res) => {
+router.get('/users/:userId', verifyUser,  (req, res) => {
 
     //Check if user is valid
     if(!ObjectID.isValid(req.params.userId)){
@@ -93,6 +94,7 @@ router.get('/users/:userId',  (req, res) => {
         Booking.find({
             userId: req.params.userId
         })
+        .sort({ createdAt: -1 })
         .then(bookings => {
             res.json({ bookings })
         })
@@ -119,19 +121,20 @@ router.post('/:turfId', auth, (req, res) => {
     }
 
     Turf.findById(req.params.turfId)
-    .then(turf => {
+    .then(turfFound => {
          //Check if turf is valid
-        if(!turf){
+        if(!turfFound){
             return res.status(400).json({ msg: "Invalid turf id" })
         }
 
-        let { timing } = req.body
+        let { timing, turf } = req.body
         timing = new Date(timing)
     
         //Check if slot is already booked
         Booking.find({
             timing,
-            turfId: req.params.turfId
+            turf,
+            turfId: req.params.turfId,
         })
         .then(booking => {
     
@@ -143,12 +146,13 @@ router.post('/:turfId', auth, (req, res) => {
             const newBooking = new Booking({
                 userId: req.user.id,
                 turfId: req.params.turfId,
-                timing
+                timing,
+                turf
             })
         
             newBooking.save()
             .then(booking => {
-                res.json({msg: "Booking successfull", booking})
+                res.json({msg: "Booking successful", booking})
             })
             .catch(err => {
                 console.log(err)

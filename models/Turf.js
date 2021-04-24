@@ -6,6 +6,10 @@ const TurfSchema = new Schema({
         type: String,
         required: true
     },
+    locality: {
+        type: String,
+        required: true
+    },
     address: {
         type: String,
         required: true
@@ -29,6 +33,9 @@ const TurfSchema = new Schema({
     isApproved:{
         type: Boolean,
         default: false
+    },
+    fileURL:{
+        type: String
     }
 })
 
