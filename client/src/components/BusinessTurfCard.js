@@ -15,7 +15,7 @@ import { red } from '@material-ui/core/colors'
 import { withRouter } from "react-router-dom"
 import { connect } from 'react-redux'
 import { selectTurf } from '../actions/turfsActions'
-import ConfirmTurfApproval from './ConfirmTurfApproval'
+import ConfirmDeleteTurf from './ConfimDeleteTurf'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,24 +50,14 @@ const TurfCard = ({ turf, history,selectTurf, auth }) => {
 
     // console.log(history.location.pathname)
     const onClick = () => {
-      if(auth && auth.isAuthenticated && auth.user.role === "ADMIN"){
-        onModalToggle()
-      }
-      else if(auth && auth.isAuthenticated && auth.user._id === turf.ownerId){
-        selectTurf(turf)
-        history.push(`/turfs/business/${turf._id}`)
-      }
-      else{
-        selectTurf(turf)
-        history.push(`/turfs/${turf._id}`)
-      }
-
+      selectTurf(turf)
+      history.push(`/turfs/business/${turf._id}`)
     }
 
     return (
         <Card className={classes.root} 
         raised >
-        <CardActionArea onClick={onClick}>
+        <CardActionArea onClick={onClick}  disabled={!turf.isApproved}>
         <CardHeader
           avatar={
             <Avatar  className={classes.avatar}>
@@ -108,15 +98,23 @@ const TurfCard = ({ turf, history,selectTurf, auth }) => {
           <Typography variant="body2" color="textSecondary" component="p" display='inline' className={classes.leftSpacing} >
           Rs. {turf.costPerHour} /hr
           </Typography>
+{     !turf.isApproved  &&    <>
+          <br />
+          <Typography  variant="body1" color="secondary" style={{fontStyle: 'italic', fontWeight: "500"}} >
+              Approval pending
+          </Typography>
+          </>}
         </CardContent>
         </CardActionArea>
-        <CardActions disableSpacing>
-            <Button fullWidth variant="outlined" color="primary" onClick={onClick}>
-                { auth && auth.isAuthenticated && auth.user.role === "ADMIN"?"Approve Turf": "Book Now"}  
+        <CardActions >
+            <Button fullWidth variant="outlined" color="primary" onClick={onClick} disabled={!turf.isApproved} >
+                View Bookings
+            </Button>
+            <Button fullWidth variant="outlined" color="secondary" onClick={onModalToggle} >
+                Delete Turf
             </Button>
         </CardActions>
-        <ConfirmTurfApproval isOpen={confirmModal} onToggle={onModalToggle} turf={turf} />
-        
+        <ConfirmDeleteTurf isOpen={confirmModal} onToggle={onModalToggle} turf={turf} />
       </Card>
     )
 }

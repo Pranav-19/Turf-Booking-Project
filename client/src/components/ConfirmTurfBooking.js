@@ -7,6 +7,9 @@ import { withRouter } from "react-router-dom"
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { Alert } from 'reactstrap'
+import EventRoundedIcon from '@material-ui/icons/EventRounded'
+import AccessTimeRounded from '@material-ui/icons/AccessTimeRounded'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -20,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
 function ConfirmTurfBooking({ isOpen,onToggle, turf, slot, auth, date, history }) {
     const classes = useStyles()
     const [msg, setMsg] = useState(null)
+    console.log(date, slot)
+
     const onConfirmBooking = async () => {
       console.log(date)
       if(!auth.isAuthenticated){
@@ -28,7 +33,8 @@ function ConfirmTurfBooking({ isOpen,onToggle, turf, slot, auth, date, history }
       }
       const newBooking = {
         turf,
-        timing: `${date.toDateString()} ${slot.timing.substring(0,8)}`
+        timing: `${date.toDateString()} ${slot.timing.substring(0,8)}`,
+        user: auth.user
       }
       const config = {
         headers:{
@@ -52,6 +58,17 @@ function ConfirmTurfBooking({ isOpen,onToggle, turf, slot, auth, date, history }
  <ModalHeader toggle={onToggle}>Confirm Booking</ModalHeader>
         <ModalBody>
          Do you want to confirm this booking? 
+         <br />
+         <br />
+{     slot &&  <>
+        <Typography variant="body1">
+            <EventRoundedIcon /> {date.toDateString()}
+          </Typography>
+          <Typography variant="body1">
+             <AccessTimeRounded width={1} />  {slot.timing}
+         </Typography>
+         </>
+}
         {msg && <Alert color="danger" >{msg}</Alert>}
         </ModalBody>
         <ModalFooter>

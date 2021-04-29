@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import BookingCard from '../BookingCard'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import { Alert } from 'reactstrap'
 
 const useStyles = makeStyles(theme => ({
     header:{
@@ -29,6 +30,7 @@ function ViewMyBookingsPage(props) {
                     "x-auth-token": `${auth.token}`
                 }
             }
+            console.log(auth)
             axios.get(`/api/bookings/users/${auth.user._id}`,config)
             .then(res => {
                 console.log(res.data)
@@ -46,6 +48,8 @@ function ViewMyBookingsPage(props) {
             { bookings.map(booking => (
                 <BookingCard booking={booking} key={booking._id}  />
             ))}
+
+        {  bookings.length === 0 && <Alert color="danger" >No results found </Alert> }
         </div>
     )
 }

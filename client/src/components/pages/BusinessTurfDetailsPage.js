@@ -16,6 +16,7 @@ import { red } from '@material-ui/core/colors'
 import Grid from '@material-ui/core/Grid';
 import DatePicker from "react-datepicker";
 import Slots from "../Slots"
+import BookingCardBusiness from '../BookingCardBusiness'
 import "react-datepicker/dist/react-datepicker.css";
 import axios from 'axios'
 import { withRouter, useParams } from "react-router-dom"
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   }))
 let prevDate = null
 
-function TurfDetailsPage(props) {
+function BusinessTurfDetailsPage(props) {
     const classes = useStyles()
     let { turfId } = useParams()
     const date = new Date()
@@ -143,13 +144,27 @@ function TurfDetailsPage(props) {
       </Grid>
       <Grid  item xs={12} sm={6} >
       <Typography variant="h4" color="primary"  >
-      Select a Slot
+      Slots Available
         </Typography>  
         <DatePicker selected={startDate} onChange={date => onDateChange(date)} />
         <Slots bookings={{bookings, date: startDate}} turf={turf} />
       </Grid>
-      
-      </Grid>
+    </Grid>
+{   bookings.length>0 && (
+<>
+<Typography variant="h4" color="primary"  >
+      Bookings done
+    </Typography>  
+    <Grid container spacing={1}>
+    { bookings.map(booking => (
+          <Grid item xs={12} sm={6} >
+           <BookingCardBusiness  booking={booking} />
+           </Grid>     
+        ))}   
+    </Grid>
+    </>
+    )
+    }
         </div>
     )
 }
@@ -158,4 +173,4 @@ const mapStateToProps = state => ({
     selectedTurf: state.turfs.selectedTurf
 })
 
-export default withRouter(connect(mapStateToProps, null)(TurfDetailsPage))
+export default withRouter(connect(mapStateToProps, null)(BusinessTurfDetailsPage))

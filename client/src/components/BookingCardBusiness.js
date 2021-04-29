@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -14,9 +14,10 @@ import EventRoundedIcon from '@material-ui/icons/EventRounded'
 import AccessTimeRounded from '@material-ui/icons/AccessTimeRounded'
 import RoomRounded from '@material-ui/icons/RoomRounded'
 import PhoneRounded from '@material-ui/icons/PhoneRounded'
+import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
+import EmailRoundedIcon from '@material-ui/icons/EmailRounded';
 import { red } from '@material-ui/core/colors'
 import Grid from '@material-ui/core/Grid'
-import ConfirmCancelBooking from './ConfirmCancelBooking'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,32 +38,17 @@ const useStyles = makeStyles((theme) => ({
     },
     leftSpacing:{
       marginLeft: 5
-    },
-    cancelButton: {
-      marginTop: 5,
-      borderRadius:8
     }
   }))
   
 
 
-function BookingCard({ booking }) {
+function BookingCardBusiness({ booking }) {
     const classes = useStyles()
-    const {turf} = booking
+    const {turf, user} = booking
     let date = new Date(booking.timing)
     let to = new Date(booking.timing)
-    let now = new Date()
     to.setHours(date.getHours() + 1)
-
-    const [confirmModal, setConfirmModal] = useState(false)
-
-    const onModalToggle = () => {
-      setConfirmModal(!confirmModal)
-  }
-
-  const cancelAllowed = now.getTime() <= (date.getTime() - 60000)?true: false
-
-
 
     return (
         <div>
@@ -89,25 +75,19 @@ function BookingCard({ booking }) {
                                   <AccessTimeRounded />  {date.toLocaleTimeString()} - {to.toLocaleTimeString()}
                                 </Typography>
                                 <Typography variant="h6">
-                                  <RoomRounded /> {turf.address}
+                                  <PersonRoundedIcon /> {user.name}
                                 </Typography>
                                 <Typography variant="h6">
-                                  <PhoneRounded /> {turf.phoneNo}
+                                  <EmailRoundedIcon /> {user.email}
                                 </Typography>
-{        cancelAllowed &&    <Button color="secondary" variant="outlined" size="medium" className={classes.cancelButton}
-                                onClick={onModalToggle}
-                                >
-                                  Cancel booking
-                                </Button>}
                             </CardContent>
                         </Grid>
                         
                     </Grid>
                 </CardActionArea>
-                <ConfirmCancelBooking isOpen={confirmModal} onToggle={onModalToggle} booking={booking} />
             </Card>
         </div>
     )
 }
 
-export default BookingCard
+export default BookingCardBusiness

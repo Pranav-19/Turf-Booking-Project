@@ -8,7 +8,7 @@ const TurfSchema = new Schema({
     },
     locality: {
         type: String,
-        required: true
+        // required: true
     },
     address: {
         type: String,
@@ -39,4 +39,9 @@ const TurfSchema = new Schema({
     }
 })
 
-module.exports = Turf = mongoose.model('turf', TurfSchema)
+TurfSchema.index({ name: 'text', locality: 'text', address: 'text' });
+const Turf = mongoose.model('turf', TurfSchema);
+Turf.createIndexes();
+
+
+module.exports = Turf 

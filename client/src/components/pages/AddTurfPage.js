@@ -12,6 +12,7 @@ import axios from 'axios'
 import { withRouter } from "react-router-dom"
 import Thumb from '../Thumb'
 import { storage } from '../../firebase';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const validationSchema = yup.object({
@@ -55,6 +56,7 @@ function AddTurfPage({auth,history}) {
 
     const [isOpen,toggleIsOpen] = useState(false);
     const [msg,setMsg] = useState(null)
+    const [isLoading,setIsLoading] = useState(false)
 
     const onToggle = () => { 
         toggleIsOpen(!isOpen)
@@ -72,7 +74,7 @@ function AddTurfPage({auth,history}) {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-          alert(JSON.stringify(values));
+          setIsLoading(true)
           console.log(values)
           const { file } = values
           const uploadTask = storage.ref(`images/${auth.user._id}/${file.name}`).put(file);
@@ -207,13 +209,15 @@ function AddTurfPage({auth,history}) {
 
                    {formik.values.file &&  <Thumb file={formik.values.file} />}
                 </div>
-
+         { isLoading && <CircularProgress color="primary" />}
         <Button  color="primary" variant="outlined" fullWidth type="submit" className={classes.addTurfButton}>
           Add Turf
         </Button>
       </form>
+
       <br />
       {msg && <Alert color="danger" >{msg}</Alert>}
+
       </ModalBody>  
     </Modal>
     </div>

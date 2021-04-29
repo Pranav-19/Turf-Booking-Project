@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import BusinessTurfCard from '../BusinessTurfCard'
+import TurfCard from '../TurfCard'
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux'
-import { getBusinessTurfs } from '../../actions/businessTurfsActions'
+import { withRouter, useLocation } from "react-router-dom"
+import store from '../../store'
+import { getSearchedTurfs } from '../../actions/turfsActions'
+import { Alert } from 'reactstrap'
 
 
 const useStyles = makeStyles({
@@ -22,37 +25,45 @@ const useStyles = makeStyles({
   }
 })
 
-function ViewMyTurfsPage(props) {
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
 
-
-    useEffect(() => {
-        if(props.businessTurfs.businessTurfs.length === 0)
-            props.getBusinessTurfs()
-    })
+function SearchResultsPage(props) {
 
     const classes = useStyles()
-    const { businessTurfs } = props.businessTurfs
+    const { turfs } = props.turfs
+    let query = useQuery();
+    console.log(query.get("searchText"))
+    let search = query.get("searchText")
+
+    useEffect(() => {
+        store.dispatch(getSearchedTurfs(search));
+    }, [search])
+
+
 
     return (
         <div>
             <Typography variant="h4" className={classes.header} color="primary"  >
-                My Turfs
+                Search results for: {search}
             </Typography>
             <Grid container spacing={2}  >
 
-                { businessTurfs.map( turf => (
+                { turfs.map( turf => (
                      <Grid item sm={6} xs={12} md={4} key={turf._id} >
-                        <BusinessTurfCard turf={turf} />
+                        <TurfCard turf={turf} />
                      </Grid>
                 )) }
             </Grid>
+            { turfs.length === 0 && <Alert color="danger" >No results found </Alert> }
         </div>
     )
 }
 const mapStateToProps = (state) => ({
-    businessTurfs: state.businessTurfs,
+    turfs: state.turfs,
     error: state.error
 })
 
 
-export default connect(mapStateToProps, { getBusinessTurfs })(ViewMyTurfsPage)
+export default withRouter(connect(mapStateToProps, null)(SearchResultsPage))

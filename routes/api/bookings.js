@@ -77,8 +77,9 @@ router.get('/:turfId',  (req, res) => {
 
 // @route GET api/bookings/users/:userId
 // @desc Get all bookings of a user
-// @access Public
+// @access Private
 router.get('/users/:userId', verifyUser,  (req, res) => {
+
 
     //Check if user is valid
     if(!ObjectID.isValid(req.params.userId)){
@@ -94,7 +95,7 @@ router.get('/users/:userId', verifyUser,  (req, res) => {
         Booking.find({
             userId: req.params.userId
         })
-        .sort({ createdAt: -1 })
+        .sort({ timing: -1 })
         .then(bookings => {
             res.json({ bookings })
         })
@@ -127,8 +128,9 @@ router.post('/:turfId', auth, (req, res) => {
             return res.status(400).json({ msg: "Invalid turf id" })
         }
 
-        let { timing, turf } = req.body
+        let { timing, turf, user } = req.body
         timing = new Date(timing)
+        console.log(req.body)
     
         //Check if slot is already booked
         Booking.find({
@@ -147,7 +149,8 @@ router.post('/:turfId', auth, (req, res) => {
                 userId: req.user.id,
                 turfId: req.params.turfId,
                 timing,
-                turf
+                turf,
+                user
             })
         
             newBooking.save()
@@ -169,9 +172,35 @@ router.post('/:turfId', auth, (req, res) => {
 // @desc Cancel a booking
 // @access Private
 
-// router.delete('/:turfId/:bookingId',auth, (req, res) => {
-    
-// } )
+router.delete('/:turfId/:bookingId',auth, (req, res) => {
+         //Check if turf is valid
+         if(!ObjectID.isValid(req.params.turfId)){
+            return res.status(400).json({ msg: "Invalid turf id" })
+        }
+         //Check if booking is valid
+         if(!ObjectID.isValid(req.params.bookingId)){
+            return res.status(400).json({ msg: "Invalid booking id" })
+        }
+
+        Booking.findById(req.params.bookingId)
+        .then(booking => {
+            if(!booking){
+                return res.status(400).json({ msg: "Invalid booking id" })
+            }
+
+            let date = new Date()
+
+            if(req.user.id !== booking.user._id){
+                return res.status(401).json({ msg: "Not authorised" })
+            }
+
+            Booking.findByIdAndDelete(booking._id)
+            .then(() => res.json({ success: true }))
+            .catch(err => console.log(err))
+        })
+        .catch(err => console.log(err))
+
+} )
 
 
 module.exports = router

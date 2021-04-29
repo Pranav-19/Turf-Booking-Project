@@ -24,17 +24,17 @@ return (
 			<FooterLink href="#">Vision</FooterLink>
 			<FooterLink href="#">Testimonials</FooterLink>
 		</Column>
-		<Column>
+		{/* <Column>
 			<Heading>Services</Heading>
 			<FooterLink href="#">Booking</FooterLink>
 			<FooterLink href="#">Business</FooterLink>
-		</Column>
+		</Column> */}
 		<Column>
 			<Heading>Contact Us</Heading>
-			<FooterLink href="#">Uttar Pradesh</FooterLink>
-			<FooterLink href="#">Ahemdabad</FooterLink>
-			<FooterLink href="#">Indore</FooterLink>
-			<FooterLink href="#">Mumbai</FooterLink>
+			<FooterLink href="/contact">Contact</FooterLink>
+			{/* <FooterLink href="/contact">Ahemdabad</FooterLink>
+			<FooterLink href="/contact">Indore</FooterLink>
+			<FooterLink href="/contact">Mumbai</FooterLink> */}
 		</Column>
 		<Column>
 			<Heading>Social Media</Heading>

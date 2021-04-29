@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const TurfSchema = require('./Turf').schema
+const UserSchema = require('./User').schema
 
 const BookingSchema = new Schema({
     userId: {
@@ -18,7 +19,10 @@ const BookingSchema = new Schema({
     turf: {
         type: TurfSchema,
         required: true
-    }
+    },
+    user: {
+        type: Object
+    },
 },{ timestamps: true })
 
 module.exports = Booking = mongoose.model('booking', BookingSchema)

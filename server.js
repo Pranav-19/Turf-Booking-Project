@@ -1,12 +1,19 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('config')
+var cors = require('cors')
 
 
-const app = express()
+const app = express();
+app.use(express.json())
+
+app.use(cors()) // Use this after the variable declaration
+
+
+
 
 //Body parser middleware
-app.use(express.json())
+
 
 // db config
 const db = config.get('mongoURILocal')
@@ -21,6 +28,7 @@ app.use('/api/users',require('./routes/api/users'))
 app.use('/api/auth',require('./routes/api/auth'))
 app.use('/api/turfs',require('./routes/api/turfs'))
 app.use('/api/bookings',require('./routes/api/bookings'))
+app.use('/api/contact',require('./routes/api/contact'))
 
 
 const port = process.env.PORT || 5000
