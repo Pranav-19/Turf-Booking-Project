@@ -7,6 +7,7 @@ import { slots } from './timeSlots'
 import ConfirmTurfBooking from './ConfirmTurfBooking'
 import { connect } from 'react-redux'
 import { Alert } from 'reactstrap'
+import axios from 'axios';
 
 const styles = (theme) => ({
     root: {
@@ -66,12 +67,82 @@ class Slots extends React.Component {
     //     this.setState({ confirmModal: !this.state.confirmModal })
     // }
 
+    timeout = null
     onModalToggle = (slot) => {
         if(!this.props.auth.isAuthenticated){
             this.setState({ msg: "You need to login in order to book a slot"})
             return;
         }
-        this.setState({ confirmModal: !this.state.confirmModal, selectedSlot: slot })
+        console.log(slot)
+        let date = new Date(this.props.bookings.date)
+        let timing =  `${date.toDateString()} ${slot.timing.substring(0,8)}`
+        
+        if(this.state.confirmModal === false){
+            let newTempBooking = {
+                timing: timing,
+                userId: this.props.auth.user._id
+            }
+            const config = {
+                headers:{
+                    "Content-type": "application/json",
+                    "x-auth-token": `${this.props.auth.token}`
+                }
+            }
+            axios.post(`/api/temporaryBooking/${this.props.turf._id}`,newTempBooking, config)
+            .then(res => {
+                console.log(res.data)
+                if(res.status === 400){
+                    console.log("return")
+                    this.setState({ msg: "Slot already booked"})
+                    // alert.show(<div style={{ color: 'blue' }}>Some Message</div>)
+                    return
+                }
+            this.setState({ confirmModal: !this.state.confirmModal, selectedSlot: slot }, () => {
+                this.timeout = setTimeout(() => { this.onModalToggle(slot)
+                    // this.setState({msg: "Timed out"})
+                    alert("Timed out")
+                    }, 5000 * 12);
+            })
+            })
+            .catch(err => {
+                console.log(err)
+                // this.setState({ msg: "Slot already booked"})
+                alert("Slot already booked")
+                // alert.show(<div style={{ color: 'blue' }}>Slot already booked</div>)
+                
+            })
+
+            // if(shouldReturn){
+            //     return
+            // }
+        }
+        else{
+            if(this.timeout){
+                clearTimeout(this.timeout)
+                this.timeout = null
+            }
+            let deleteTempBooking = {
+                timing: timing
+            }
+            const config = {
+                headers:{
+                    "Content-type": "application/json",
+                    "x-auth-token": `${this.props.auth.token}`
+                },
+                data: deleteTempBooking
+            }
+            let shouldReturn = false
+            axios.delete(`/api/temporaryBooking/${this.props.turf._id}`, config)
+            .then(res => {
+                console.log(res.data)
+
+            this.setState({ confirmModal: !this.state.confirmModal, selectedSlot: slot })
+            })
+            .catch(err => console.log(err))
+
+        }
+
+        // this.setState({ confirmModal: !this.state.confirmModal, selectedSlot: slot })
         console.log(slot)
     }
 
@@ -85,7 +156,13 @@ class Slots extends React.Component {
                     <Grid container spacing={2}>
                         {this.state.timeSlots.map(slot => (
                         <Grid item xs={6} sm={4} key={slot.id} >
-                            <Button variant="outlined" color="primary" size="small" disabled={!slot.available} onClick={() => this.onModalToggle(slot)}  >
+                            <Button variant="outlined" color="primary" size="small" disabled={!slot.available} onClick={() => {
+                                this.onModalToggle(slot)
+                                // setTimeout(() => { this.onModalToggle(slot)
+                                // this.setState({msg: "Timed out"})
+                                // // alert("Timed out")
+                                // }, 5000);
+                                }}  >
                                 {slot.timing}
                             </Button>
                         </Grid>

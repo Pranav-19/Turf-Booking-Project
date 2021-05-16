@@ -46,16 +46,16 @@ function ConfirmTurfBooking({ isOpen,onToggle, turf, slot, auth, date, history }
 
       const response = await axios.post(`/api/bookings/${turf._id}`,newBooking, config)
       console.log(response.data)
-      onToggle()
+      onToggle(slot)
       history.push('/myBookings')
     }
 
     return (
         <Modal
             isOpen={isOpen}
-            toggle={onToggle}
+            toggle={() => onToggle(slot)}
             className={classes.modal}>
- <ModalHeader toggle={onToggle}>Confirm Booking</ModalHeader>
+ <ModalHeader toggle={() => onToggle(slot)}>Confirm Booking</ModalHeader>
         <ModalBody>
          Do you want to confirm this booking? 
          <br />
@@ -73,7 +73,7 @@ function ConfirmTurfBooking({ isOpen,onToggle, turf, slot, auth, date, history }
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={onConfirmBooking}>Confirm</Button>{' '}
-          <Button color="secondary" onClick={onToggle}>Cancel</Button>
+          <Button color="secondary" onClick={() => onToggle(slot)}>Cancel</Button>
         </ModalFooter>
         </Modal>
     )

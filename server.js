@@ -29,6 +29,7 @@ app.use('/api/auth',require('./routes/api/auth'))
 app.use('/api/turfs',require('./routes/api/turfs'))
 app.use('/api/bookings',require('./routes/api/bookings'))
 app.use('/api/contact',require('./routes/api/contact'))
+app.use('/api/temporaryBooking',require('./routes/api/temporaryBooking'))
 
 
 const port = process.env.PORT || 5000
